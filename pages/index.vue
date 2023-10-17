@@ -1,0 +1,5 @@
+<template>
+	<MyScene />
+
+	<Credits />
+</template>

@@ -1,7 +1,7 @@
 <template>
-	<MyScene />
-
-	<Credits />
+	<NuxtLayout>
+		<NuxtPage />
+	</NuxtLayout>
 </template>
 
 <style lang="scss">
