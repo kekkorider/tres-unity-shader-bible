@@ -34,8 +34,11 @@ onMounted(async () => {
 
 	onLoop(() => {
 		if (!!!meshRef.value) return
+
 		meshRef.value.$el.material.uniforms.u_LightPosition.value =
 			lightRef.value.position
+
+		meshRef.value.$el.rotation.y += 0.01
 	})
 })
 </script>

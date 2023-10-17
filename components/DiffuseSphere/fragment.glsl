@@ -1,4 +1,4 @@
-varying vec3 vPosition;
+varying vec3 vWorldPosition;
 varying vec2 vUv;
 
 uniform vec3 u_LightPosition;
@@ -15,7 +15,7 @@ void main() {
   normal = normal * 2.0 - 1.0;
 
   float l = max(0.0, dot(normal, normalize(u_LightPosition - u_WorldPosition)));
-  l *= u_LightIntensity * max(0.0, smoothstep(2.0, 0.5, length(u_LightPosition - vPosition)));
+  l *= u_LightIntensity * max(0.0, smoothstep(3.0, 0.5, length(u_LightPosition - vWorldPosition)));
 
   gl_FragColor = vec4(color + LIGHT_COLOR * l, 1.0);
 }

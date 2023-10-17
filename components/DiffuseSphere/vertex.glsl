@@ -1,5 +1,5 @@
 varying vec2 vUv;
-varying vec3 vPosition;
+varying vec3 vWorldPosition;
 
 uniform sampler2D t_DisplacementMap;
 
@@ -13,5 +13,5 @@ void main() {
   #include <project_vertex>
 
   vUv = uv * 2.0;
-  vPosition = transformed;
+  vWorldPosition = (modelMatrix * vec4(transformed, 1.0)).xyz;
 }
