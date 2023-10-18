@@ -9,7 +9,7 @@ import { Vector3 } from 'three'; import { RepeatWrapping } from 'three'; import
 
 <script setup>
 import { useTexture } from '@tresjs/core'
-import { Vector3, RepeatWrapping } from 'three'
+import { Vector3, RepeatWrapping, Color } from 'three'
 
 import vertexShader from './vertex.glsl'
 import fragmentShader from './fragment.glsl'
@@ -40,8 +40,13 @@ const materialConfig = {
 			value: texture.displacementMap,
 		},
 		u_WorldPosition: { value: new Vector3() },
-		u_LightPosition: { value: new Vector3() },
-		u_LightIntensity: { value: 0.5 },
+
+		u_PointLightPosition: { value: new Vector3() },
+		u_PointLightIntensity: { value: 0.5 },
+		u_PointLightColor: { value: new Color('#fff') },
+
+		u_EnvLight: { value: new Color('#fff') },
+		u_EnvLightIntensity: { value: 0.3 },
 	},
 }
 </script>

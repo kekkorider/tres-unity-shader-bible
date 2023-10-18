@@ -10,14 +10,14 @@
 			<DiffuseSphere ref="meshRef" :position="[0, 0, 0]" />
 		</Suspense>
 
-		<TresObject3D ref="lightRef" :position="(0, 3, 0)" />
+		<TresObject3D ref="lightRef" :position="[1.3, 0, 1.3]" />
 		<TransformControls :object="lightRef" />
 	</TresCanvas>
 </template>
 
 <script setup>
 import { useRenderLoop } from '@tresjs/core'
-import { StatsGl } from '@tresjs/cientos'
+import { StatsGl, useTweakPane } from '@tresjs/cientos'
 
 const meshRef = shallowRef(null)
 const lightRef = shallowRef(null)
@@ -29,16 +29,94 @@ const gl = {
 	powerPreference: 'high-performance',
 }
 
+const config = shallowReactive({
+	envLight: { r: 1, g: 1, b: 1 },
+	envLightIntensity: 0.3,
+
+	pointLightColor: { r: 1, g: 1, b: 1 },
+	pointLightIntensity: 0.5,
+})
+
 onMounted(async () => {
 	await nextTick()
 
 	onLoop(() => {
 		if (!!!meshRef.value) return
 
-		meshRef.value.$el.material.uniforms.u_LightPosition.value =
+		meshRef.value.$el.material.uniforms.u_PointLightPosition.value =
 			lightRef.value.position
 
 		meshRef.value.$el.rotation.y += 0.01
 	})
+
+	createDebugPanel()
 })
+
+function createDebugPanel() {
+	const { pane } = useTweakPane()
+
+	// Environment light
+	const envLightFolder = pane.addFolder({
+		title: 'Environment light',
+	})
+
+	envLightFolder
+		.addBinding(config, 'envLight', {
+			label: 'Env light',
+			view: 'color',
+			color: {
+				type: 'float',
+			},
+		})
+		.on('change', ({ value }) => {
+			meshRef.value.$el.material.uniforms.u_EnvLight.value.setRGB(
+				value.r,
+				value.g,
+				value.b
+			)
+		})
+
+	envLightFolder
+		.addBinding(config, 'envLightIntensity', {
+			label: 'Env light intensity',
+			min: 0,
+			max: 1,
+			step: 0.01,
+		})
+		.on('change', ({ value }) => {
+			meshRef.value.$el.material.uniforms.u_EnvLightIntensity.value = value
+		})
+
+	// Point Light
+	const pointLightFolder = pane.addFolder({
+		title: 'Point light',
+	})
+
+	pointLightFolder
+		.addBinding(config, 'pointLightColor', {
+			label: 'Point light color',
+			view: 'color',
+			color: {
+				type: 'float',
+			},
+		})
+		.on('change', ({ value }) => {
+			meshRef.value.$el.material.uniforms.u_PointLightColor.value.setRGB(
+				value.r,
+				value.g,
+				value.b
+			)
+		})
+
+	pointLightFolder
+		.addBinding(config, 'pointLightIntensity', {
+			label: 'Point light intensity',
+			min: 0,
+			max: 1,
+			step: 0.01,
+		})
+		.on('change', ({ value }) => {
+			meshRef.value.$el.material.uniforms.u_PointLightIntensity.value = value
+		})
+}
 </script>
