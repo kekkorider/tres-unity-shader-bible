@@ -35,6 +35,8 @@ const config = shallowReactive({
 
 	pointLightColor: { r: 1, g: 1, b: 1 },
 	pointLightIntensity: 0.5,
+
+	aoMapIntensity: 0.8,
 })
 
 onMounted(async () => {
@@ -117,6 +119,22 @@ function createDebugPanel() {
 		})
 		.on('change', ({ value }) => {
 			meshRef.value.$el.material.uniforms.u_PointLightIntensity.value = value
+		})
+
+	// Ambient occlusion
+	const aoFolder = pane.addFolder({
+		title: 'Ambient occlusion',
+	})
+
+	aoFolder
+		.addBinding(config, 'aoMapIntensity', {
+			label: 'AO map intensity',
+			min: 0,
+			max: 1,
+			step: 0.01,
+		})
+		.on('change', ({ value }) => {
+			meshRef.value.$el.material.uniforms.u_AoMapIntensity.value = value
 		})
 }
 </script>
