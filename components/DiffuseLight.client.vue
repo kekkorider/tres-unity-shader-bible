@@ -37,6 +37,8 @@ const config = shallowReactive({
 	pointLightIntensity: 0.5,
 
 	aoMapIntensity: 0.8,
+
+	displacement: 0.06,
 })
 
 onMounted(async () => {
@@ -56,6 +58,22 @@ onMounted(async () => {
 
 function createDebugPanel() {
 	const { pane } = useTweakPane()
+
+	// Displacement
+	const displacementFolder = pane.addFolder({
+		title: 'Displacement',
+	})
+
+	displacementFolder
+		.addBinding(config, 'displacement', {
+			label: 'Displacement',
+			min: 0,
+			max: 0.15,
+			step: 0.001,
+		})
+		.on('change', ({ value }) => {
+			meshRef.value.$el.material.uniforms.u_Displacement.value = value
+		})
 
 	// Environment light
 	const envLightFolder = pane.addFolder({

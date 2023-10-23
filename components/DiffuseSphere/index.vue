@@ -56,6 +56,8 @@ const materialConfig = {
 
 		u_EnvLight: { value: new Color('#fff') },
 		u_EnvLightIntensity: { value: 0.3 },
+
+		u_Displacement: { value: 0.06 },
 	},
 	defines: {
 		USE_UV2: '',
