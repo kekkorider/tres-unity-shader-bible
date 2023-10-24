@@ -50,7 +50,7 @@ onMounted(async () => {
 		meshRef.value.$el.material.uniforms.u_PointLightPosition.value =
 			lightRef.value.position
 
-		meshRef.value.$el.rotation.y += 0.01
+		// meshRef.value.$el.rotation.y += 0.01
 	})
 
 	createDebugPanel()

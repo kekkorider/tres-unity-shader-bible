@@ -10,7 +10,7 @@ void main() {
 
   #include <begin_vertex>
 
-  transformed *= 1.0 - texture2D(t_DisplacementMap, uv * 2.0).xyz * u_Displacement;
+  transformed *= 1.0 + (1.0 - texture2D(t_DisplacementMap, uv * 2.0).xyz) * u_Displacement;
 
   #include <project_vertex>
 

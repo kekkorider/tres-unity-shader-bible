@@ -29,23 +29,21 @@ void main() {
 
   vec3 lightDir = normalize(u_PointLightPosition - u_WorldPosition);
 
-  vec3 diffuse = LambertShading(normal, lightDir, u_PointLightColor, u_PointLightIntensity);
-  color *= diffuse;
+  // Ambient light
+  vec3 ambientLight = u_EnvLight * u_EnvLightIntensity;
+
+  // Diffuse light
+  vec3 diffuseLight = LambertShading(normal, lightDir, u_PointLightColor, u_PointLightIntensity);
 
   // AO
-  float ambientOcclusion = (texture2D( t_AoMap, vUv2 ).r - 1.0) * u_AoMapIntensity + 1.0;
-  color *= ambientOcclusion;
-
-  // Env light
-  color += u_EnvLight * u_EnvLightIntensity;
+  float ambientOcclusion = (texture2D(t_AoMap, vUv2).r - 1.0) * u_AoMapIntensity + 1.0;
 
   // Point light
-  float l = max(0.0, dot(normal, lightDir));
-  l *= max(0.0, smoothstep(3.0, 0.5, length(u_PointLightPosition - vWorldPosition)));
+  float pointLightStrength = max(0.0, dot(normal, lightDir));
+  pointLightStrength *= max(0.0, smoothstep(3.0, 0.5, length(u_PointLightPosition - vWorldPosition)));
+  vec3 pointLight = u_PointLightColor * u_PointLightIntensity * pointLightStrength;
 
-  vec3 pointLight = u_PointLightColor * u_PointLightIntensity * l;
+  vec3 finalColor = (color * diffuseLight + ambientLight + pointLight) * ambientOcclusion;
 
-  color += pointLight;
-
-  gl_FragColor = vec4(color, 1.0);
+  gl_FragColor = vec4(finalColor, 1.0);
 }
