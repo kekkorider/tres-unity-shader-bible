@@ -38,7 +38,11 @@ const config = shallowReactive({
 
 	aoMapIntensity: 0.8,
 
-	displacement: 0.06,
+	displacement: 0.04,
+
+	specularIntensity: 0.5,
+	specularPower: 32,
+	specularColor: { r: 1, g: 1, b: 1 },
 })
 
 onMounted(async () => {
@@ -153,6 +157,49 @@ function createDebugPanel() {
 		})
 		.on('change', ({ value }) => {
 			meshRef.value.$el.material.uniforms.u_AoMapIntensity.value = value
+		})
+
+	// Specular
+	const specularFolder = pane.addFolder({
+		title: 'Specular',
+	})
+
+	specularFolder
+		.addBinding(config, 'specularIntensity', {
+			label: 'Intensity',
+			min: 0,
+			max: 1,
+			step: 0.01,
+		})
+		.on('change', ({ value }) => {
+			meshRef.value.$el.material.uniforms.u_SpecularIntensity.value = value
+		})
+
+	specularFolder
+		.addBinding(config, 'specularPower', {
+			label: 'Power',
+			min: 1,
+			max: 128,
+			step: 1,
+		})
+		.on('change', ({ value }) => {
+			meshRef.value.$el.material.uniforms.u_SpecularPower.value = value
+		})
+
+	specularFolder
+		.addBinding(config, 'specularColor', {
+			label: 'Color',
+			view: 'color',
+			color: {
+				type: 'float',
+			},
+		})
+		.on('change', ({ value }) => {
+			meshRef.value.$el.material.uniforms.u_SpecularColor.value.setRGB(
+				value.r,
+				value.g,
+				value.b
+			)
 		})
 }
 </script>

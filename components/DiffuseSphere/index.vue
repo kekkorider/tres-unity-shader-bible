@@ -3,7 +3,11 @@ import { Vector3 } from 'three'; import { RepeatWrapping } from 'three'; import
 <template>
 	<TresMesh>
 		<TresSphereGeometry ref="geometryRef" :args="[1, 64, 32]" />
-		<TresShaderMaterial v-bind="materialConfig" ref="materialRef" />
+		<TresShaderMaterial
+			v-bind="materialConfig"
+			ref="materialRef"
+			name="LightMaterial"
+		/>
 	</TresMesh>
 </template>
 
@@ -57,7 +61,11 @@ const materialConfig = {
 		u_EnvLight: { value: new Color('#fff') },
 		u_EnvLightIntensity: { value: 0.3 },
 
-		u_Displacement: { value: 0.06 },
+		u_Displacement: { value: 0.04 },
+
+		u_SpecularIntensity: { value: 0.5 },
+		u_SpecularPower: { value: 32 },
+		u_SpecularColor: { value: new Color('#fff') },
 	},
 	defines: {
 		USE_UV2: '',
